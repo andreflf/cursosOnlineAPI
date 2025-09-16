@@ -1,8 +1,12 @@
 package com.cursos.entity;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +24,9 @@ public class Aluno {
 	private long id;
 	private String nome;
 	private String email;
+	
+	@ManyToMany
+	@JoinTable(name = "curso_aluno")
+	private List<Curso> cursos;
 	
 }

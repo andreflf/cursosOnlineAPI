@@ -34,8 +34,7 @@ public class Curso {
 	@JsonIgnoreProperties("curso")
 	private List<Aula> aulas;
 	
-	@ManyToMany
-	@JoinTable(name = "curso_aluno")
+	@ManyToMany(mappedBy = "cursos", cascade = CascadeType.ALL)
 	private List<Aluno> alunos;
 	
 
