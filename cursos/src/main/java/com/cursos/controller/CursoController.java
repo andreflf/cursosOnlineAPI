@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cursos.entity.Aula;
 import com.cursos.entity.Curso;
 import com.cursos.service.CursoService;
 
@@ -28,6 +29,12 @@ public class CursoController {
 	@PostMapping("/save")
 	public ResponseEntity<String> save(@RequestBody Curso curso) {
 		try {
+			 // garantir que cada aula receba a referência do curso
+	        if (curso.getAulas() != null) {
+	            for (Aula aula : curso.getAulas()) {
+	                aula.setCurso(curso);
+	            }
+	        }
 			String retorno = this.cursoService.save(curso);
 			return new ResponseEntity<String>(retorno, HttpStatus.CREATED);
 

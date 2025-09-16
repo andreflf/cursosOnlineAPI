@@ -16,6 +16,7 @@ public class CursoService {
 	
 	public String save(Curso curso) {
 		this.cursoRepository.save(curso);
+		
 		return "Curso adicionado com sucesso!";
 	}
 	
