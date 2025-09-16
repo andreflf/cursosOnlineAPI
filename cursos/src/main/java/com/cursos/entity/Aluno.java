@@ -1,6 +1,8 @@
 package com.cursos.entity;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +28,7 @@ public class Aluno {
 	private String email;
 	
 	@ManyToMany
+	@JsonIgnoreProperties("alunos")
 	@JoinTable(name = "curso_aluno")
 	private List<Curso> cursos;
 	
