@@ -14,7 +14,7 @@ public class CursoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 	
-	public String addCurso(Curso curso) {
+	public String save(Curso curso) {
 		this.cursoRepository.save(curso);
 		return "Curso adicionado com sucesso!";
 	}
