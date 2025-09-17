@@ -30,7 +30,8 @@ public class CursoServiceTest {
 		curso.setNome("Pedagogia");
 		curso.setDescricao("curso para área da educaçao");
 		
-		when(cursoRepository.save(any(Curso.class))).thenReturn(curso);
+		//quando a cursoRepository.save() for chamada para qualquer/any da classe Curso, entao retorne curso (o que foi criado aqui)
+		when(cursoRepository.save(any(Curso.class))).thenReturn(curso); 
 		
 		String retorno = this.cursoService.save(curso);
 		assertEquals("Curso adicionado com sucesso!", retorno);
