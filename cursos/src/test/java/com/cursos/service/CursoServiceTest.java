@@ -39,7 +39,7 @@ public class CursoServiceTest {
 	
 	@Test
 	void criacaoDeCursoSemNome() {
-		
+		//testando exception de nome do curso do CursoService
 		Curso curso = new Curso();
 		curso.setId(3);
 		curso.setNome(" ");
