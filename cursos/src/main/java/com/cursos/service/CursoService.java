@@ -15,8 +15,10 @@ public class CursoService {
 	private CursoRepository cursoRepository;
 	
 	public String save(Curso curso) {
+		if (curso.getNome() == null || curso.getNome().isBlank()) {
+            throw new IllegalArgumentException("Nome do curso não pode ser nulo ou vazio");
+        }
 		this.cursoRepository.save(curso);
-		
 		return "Curso adicionado com sucesso!";
 	}
 	

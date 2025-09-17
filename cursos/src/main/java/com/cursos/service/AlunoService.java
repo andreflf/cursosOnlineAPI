@@ -17,10 +17,14 @@ public class AlunoService {
 	
 	public String matriculaAluno(long idAluno, long idCurso) {
 		
+		if(this.alunoRepository.findById(idAluno).isEmpty() || this.cursoRepository.findById(idCurso).isEmpty())
+			return "Dados inválidos (ID do aluno ou curso inexistentes)";
+		else {
 		Aluno aluno = this.alunoRepository.findById(idAluno).get();
 		Curso curso = this.cursoRepository.findById(idCurso).get();
 		aluno.getCursos().add(curso);
 		this.alunoRepository.save(aluno);
 		return "Aluno Matriculado com Sucesso";
+		}
 	}
 }

@@ -18,6 +18,8 @@ import com.cursos.entity.Aula;
 import com.cursos.entity.Curso;
 import com.cursos.service.CursoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/cursos")
 public class CursoController {
@@ -27,7 +29,7 @@ public class CursoController {
 
 
 	@PostMapping("/save")
-	public ResponseEntity<String> save(@RequestBody Curso curso) {
+	public ResponseEntity<String> save(@Valid @RequestBody Curso curso) {
 		try {
 			 // garantir que cada aula receba a referência do curso
 	        if (curso.getAulas() != null) {

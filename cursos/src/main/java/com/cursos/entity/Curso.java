@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,10 @@ public class Curso {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@NotBlank (message = "Nome nao pode ser nulo")
 	private String nome;
+	@NotBlank(message = "descriçao nao pode ser nula")
 	private String descricao;
 	
 	@OneToMany (mappedBy = "curso", cascade = CascadeType.ALL)
