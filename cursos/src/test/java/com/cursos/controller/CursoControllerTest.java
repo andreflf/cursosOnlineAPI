@@ -2,10 +2,13 @@ package com.cursos.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,18 +35,21 @@ public class CursoControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 	
-	@Test
-	void saveComMockito() {
-		
-		Curso curso = new Curso();
+	Curso curso = new Curso();
+	
+	@BeforeEach
+	void setup() {
 		curso.setId(3); //por estar mockando o cursoRepository posso passar o ID, mas na realidade daria erro pois o ID está como auto_increment (@GeneratedValue (strategy = GenerationType.IDENTITY))
 		curso.setNome("BSI");
 		curso.setDescricao("Curso de TI");
+	}
+	
+	@Test
+	void saveComMockito() {
 		
 		when(this.cursoRepository.save(any(Curso.class))).thenReturn(curso);
 		
 		ResponseEntity<String> retorno = this.cursoController.save(curso);
-		
 		assertEquals(HttpStatus.CREATED, retorno.getStatusCode());
 		
 	}
@@ -62,5 +68,27 @@ public class CursoControllerTest {
 		mockMvc.perform(post("/api/cursos/save").contentType(MediaType.APPLICATION_JSON).content(Json)).andExpect(status().isBadRequest());
 		
 		
+	}
+	
+	@Test
+	void deleteOk() {
+		
+		doNothing().when(cursoRepository).deleteById(anyLong());
+		
+		ResponseEntity<String> retorno = cursoController.removeCurso(curso.getId());
+		assertEquals(HttpStatus.OK, retorno.getStatusCode());
+		assertEquals("Curso removido com sucesso", retorno.getBody());
+			
+	}
+	
+	@Test
+	void deleteErro() {
+		
+		curso.setId(0);
+		//doNothing().when(cursoRepository).deleteById(curso.getId()); //como cai na exceçao nem chega ao repository
+		
+		ResponseEntity<String> retorno = cursoController.removeCurso(curso.getId());
+		assertEquals(HttpStatus.NOT_FOUND, retorno.getStatusCode());
+			
 	}
 }

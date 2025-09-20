@@ -24,6 +24,9 @@ public class CursoService {
 	
 	public String removeCurso (long id) {
 		//implementar lógica de curso, curso nao pode ser removido se tiver alunos matriculados nele
+		if(id == 0)
+			throw new RuntimeException("id nao pode ser 0");
+		
 		this.cursoRepository.deleteById(id);
 		return "Curso removido com sucesso";
 	}

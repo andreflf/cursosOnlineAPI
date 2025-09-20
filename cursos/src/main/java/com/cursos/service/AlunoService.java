@@ -24,7 +24,7 @@ public class AlunoService {
 		Curso curso = this.cursoRepository.findById(idCurso).get();
 		
 		if(aluno.getNome().isBlank() || curso.getNome().isBlank()) {
-			throw new IllegalArgumentException("Nome do aluno ou nome do curso não podem ser vazios");
+			throw new IllegalArgumentException("Nome do aluno ou nome do curso não podem ser vazios"); //volta para o catch da controller dando badRequest
 		}else{
 		aluno = this.alunoRepository.findById(idAluno).get();
 		curso = this.cursoRepository.findById(idCurso).get();
