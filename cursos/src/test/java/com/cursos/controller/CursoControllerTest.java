@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +92,23 @@ public class CursoControllerTest {
 		ResponseEntity<String> retorno = cursoController.removeCurso(curso.getId());
 		assertEquals(HttpStatus.NOT_FOUND, retorno.getStatusCode());
 			
+	}
+	
+	@Test
+	void findByIdOk() {
+		curso.setId(1);
+		when(cursoRepository.findById(curso.getId())).thenReturn(Optional.of(curso));
+		
+		ResponseEntity<Curso> retorno = cursoController.findById(curso.getId());
+		assertEquals(HttpStatus.OK, retorno.getStatusCode());
+	}
+	
+	@Test
+	void findByIdErro() {
+		curso.setId(0);	
+		when(cursoRepository.findById(curso.getId())).thenReturn(Optional.of(curso));
+		
+		ResponseEntity<Curso> retorno = cursoController.findById(curso.getId());
+		assertEquals(HttpStatus.NOT_FOUND, retorno.getStatusCode());
 	}
 }

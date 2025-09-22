@@ -32,6 +32,9 @@ public class CursoService {
 	}
 	
 	public Curso findById(long id) {
+		if(id == 0)
+			throw new RuntimeException("id nao pode ser 0");
+		
 		return this.cursoRepository.findById(id).get();
 	}
 	
