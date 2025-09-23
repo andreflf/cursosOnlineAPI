@@ -39,6 +39,9 @@ public class CursoService {
 	}
 	
 	public List<Curso> findAll(){
+		if(cursoRepository.findAll().isEmpty())
+			throw new RuntimeException("Nao existe nenhum curso cadastrado");
+		
 		return this.cursoRepository.findAll();
 	}
 	
@@ -48,7 +51,7 @@ public class CursoService {
 		this.cursoRepository.save(curso);
 		return "Curso atualizado com sucesso!";
 		}else
-			return "Curso não encontrado, ID inválido.";
+			throw new RuntimeException("Curso não encontrado, ID inválido.");
 	}
 
 }

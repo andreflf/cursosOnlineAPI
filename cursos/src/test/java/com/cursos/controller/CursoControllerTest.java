@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +40,7 @@ public class CursoControllerTest {
 	MockMvc mockMvc;
 	
 	Curso curso = new Curso();
+	List<Curso> cursos = new ArrayList<>();
 	
 	@BeforeEach
 	void setup() {
@@ -111,4 +114,48 @@ public class CursoControllerTest {
 		ResponseEntity<Curso> retorno = cursoController.findById(curso.getId());
 		assertEquals(HttpStatus.NOT_FOUND, retorno.getStatusCode());
 	}
+	
+	@Test
+	void findAllErro() {
+		when(cursoRepository.findAll()).thenReturn(cursos);
+		
+		ResponseEntity<List<Curso>> retorno = cursoController.findAll();
+		assertEquals(HttpStatus.BAD_REQUEST, retorno.getStatusCode());
+	}
+	
+	@Test
+	void findAllOk() {
+		cursos.add(curso);
+		
+		when(cursoRepository.findAll()).thenReturn(cursos);
+		
+		ResponseEntity<List<Curso>> retorno = cursoController.findAll();
+		assertEquals(HttpStatus.OK, retorno.getStatusCode());
+		assertEquals(1, retorno.getBody().size());
+	    assertEquals("BSI", retorno.getBody().get(0).getNome());
+	}
+	
+	@Test
+	void updateOk() {
+		
+		when(this.cursoRepository.existsById(curso.getId())).thenReturn(true);
+		when(this.cursoRepository.save(any(Curso.class))).thenReturn(curso);
+		
+		ResponseEntity<String> retorno = cursoController.update(curso, curso.getId());
+		assertEquals("Curso atualizado com sucesso!", retorno.getBody());
+		assertEquals(HttpStatus.OK, retorno.getStatusCode());
+		
+	}
+	
+	@Test
+	void updateErro() {
+		
+		when(this.cursoRepository.existsById(anyLong())).thenReturn(false);
+		
+		ResponseEntity<String> retorno = cursoController.update(curso, anyLong());
+		assertEquals("Curso não encontrado, ID inválido.", retorno.getBody());
+		assertEquals(HttpStatus.BAD_REQUEST, retorno.getStatusCode());
+		
+	}
+	
 }
