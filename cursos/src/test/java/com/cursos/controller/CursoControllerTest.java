@@ -63,6 +63,7 @@ public class CursoControllerTest {
 	void saveComMockMvc() throws Exception {
 		
 		//passando o nome do curso sem nada gerando um badRequest, pois nome esta anotado como @NotBlank
+		//Bean Validation com @NotBlank nem deixa chegar na service. O Spring intercepta antes de invocar o método da controller e já devolve 400
 		String Json = """
 				{
 				"id":3,
@@ -153,7 +154,7 @@ public class CursoControllerTest {
 		when(this.cursoRepository.existsById(anyLong())).thenReturn(false);
 		
 		ResponseEntity<String> retorno = cursoController.update(curso, anyLong());
-		assertEquals("Curso não encontrado, ID inválido.", retorno.getBody());
+		assertEquals("Erro ao atualizar o curso", retorno.getBody());
 		assertEquals(HttpStatus.BAD_REQUEST, retorno.getStatusCode());
 		
 	}
