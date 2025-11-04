@@ -26,15 +26,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.cursos.entity.Curso;
 import com.cursos.repository.CursoRepository;
 
-@SpringBootTest
+@SpringBootTest //para poder usar as demais anotaçoes no contexto de testes (sempre usar)
 @AutoConfigureMockMvc //simular comportamento de requisiçoes HTTP - POST JSON 
 public class CursoControllerTest {
 
 	@Autowired
-	CursoController cursoController;
+	CursoController cursoController; //classe que vai testar
 	
 	@MockitoBean
-	CursoRepository cursoRepository;
+	CursoRepository cursoRepository; //classe que vai simular/classe que acessa o banco
 	
 	@Autowired
 	MockMvc mockMvc;
@@ -42,6 +42,7 @@ public class CursoControllerTest {
 	Curso curso = new Curso();
 	List<Curso> cursos = new ArrayList<>();
 	
+	//setup que será executado antes de cada teste
 	@BeforeEach
 	void setup() {
 		curso.setId(3); //por estar mockando o cursoRepository posso passar o ID, mas na realidade daria erro pois o ID está como auto_increment (@GeneratedValue (strategy = GenerationType.IDENTITY))
@@ -50,12 +51,13 @@ public class CursoControllerTest {
 	}
 	
 	@Test
-	void saveComMockito() {
+	void saveComMockito() { //sem visibilidade (public/private) e sem retorno/void
 		
 		when(this.cursoRepository.save(any(Curso.class))).thenReturn(curso);
 		
 		ResponseEntity<String> retorno = this.cursoController.save(curso);
-		assertEquals(HttpStatus.CREATED, retorno.getStatusCode());
+		assertEquals(HttpStatus.CREATED, retorno.getStatusCode()); //(valor que voce espera, valor que realmente deu)
+		//se ambos baterem o teste retorna true
 		
 	}
 	
@@ -109,7 +111,7 @@ public class CursoControllerTest {
 	
 	@Test
 	void findByIdErro() {
-		curso.setId(0);	
+		curso.setId(0); //tem uma regra de negócio na service para id=0 lançando uma exceçao	
 		when(cursoRepository.findById(curso.getId())).thenReturn(Optional.of(curso));
 		
 		ResponseEntity<Curso> retorno = cursoController.findById(curso.getId());
@@ -131,9 +133,9 @@ public class CursoControllerTest {
 		when(cursoRepository.findAll()).thenReturn(cursos);
 		
 		ResponseEntity<List<Curso>> retorno = cursoController.findAll();
-		assertEquals(HttpStatus.OK, retorno.getStatusCode());
-		assertEquals(1, retorno.getBody().size());
-	    assertEquals("BSI", retorno.getBody().get(0).getNome());
+		assertEquals(HttpStatus.OK, retorno.getStatusCode());  //compara código de retorno
+		assertEquals(1, retorno.getBody().size()); //compara tamanho
+	    assertEquals("BSI", retorno.getBody().get(0).getNome()); //compara nome do elemento 0 da lista
 	}
 	
 	@Test

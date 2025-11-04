@@ -30,7 +30,7 @@ public class CursoServiceTest {
 		curso.setNome("Pedagogia");
 		curso.setDescricao("curso para área da educaçao");
 		
-		//quando a cursoRepository.save() for chamada para qualquer/any da classe Curso, entao retorne curso (o que foi criado aqui)
+		//quando a cursoRepository.save() for chamada dentro da cursoService para qualquer/any da classe Curso, entao retorne curso (o que foi criado aqui)
 		when(cursoRepository.save(any(Curso.class))).thenReturn(curso); 
 		
 		String retorno = this.cursoService.save(curso);
@@ -40,15 +40,15 @@ public class CursoServiceTest {
 	
 	@Test
 	void criacaoDeCursoSemNome() {
-		//testando exception de nome do curso do CursoService
+		//testando exception de nome do curso do CursoService (nome está com @NotBlank)
 		Curso curso = new Curso();
 		curso.setId(3);
 		curso.setNome(" ");
 		curso.setDescricao("curso para área da educaçao");
 		
 		when(cursoRepository.save(any(Curso.class))).thenReturn(curso);
-		
-		assertThrows(IllegalArgumentException.class, () -> cursoService.save(curso));
+		//se espera que venha algo da classe IlegalArgumentException
+		assertThrows(IllegalArgumentException.class, () -> cursoService.save(curso)); 
 		
 	}
 }
